@@ -21,6 +21,10 @@ services:
     environment:
       - LOAD_EX=n
       - EXECUTOR=Local
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=ap-northeast-1
+      - AWS_ENDPOINT_URL=http://localstack:4566
     logging:
       options:
         max-size: 10m
@@ -40,3 +44,36 @@ services:
       retries: 3
     env_file:
       - ./config/.env.localrunner
+
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:stable
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=ap-northeast-1
+      - SERVICES=s3,sqs,iam,sts,cloudwatch,events,kms,logs
+      - DEBUG=1
+    volumes:
+      - "${LOCALSTACK_DATA_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  awscli:
+    container_name: "awscli"
+    image: mesosphere/aws-cli
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=ap-northeast-1
+      - AWS_ENDPOINT_URL=http://localstack:4566
+    entrypoint: /bin/sh -c
+    volumes:
+      - "${PWD}/conf/:/root/conf/"
+      - "${PWD}/docker/script/:/root/script/"
+    command: /root/script/create-kif-infra.sh
+    depends_on:
+      - localstack
