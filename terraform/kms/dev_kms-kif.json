@@ -1,0 +1,114 @@
+{
+    "Version": "2012-10-17",
+    "Id": "key-consolepolicy-3",
+    "Statement": [
+        {
+            "Sid": "Enable IAM User Permissions",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::965076974932:root"
+            },
+            "Action": "kms:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "Allow access for Key Administrators",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::965076974932:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_kif_PowerUser_a888ca22011b9cde",
+                    "arn:aws:iam::965076974932:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_be_Administrator_727cee6f5a1f1fe7"
+                ]
+            },
+            "Action": [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:TagResource",
+                "kms:UntagResource",
+                "kms:ReplicateKey",
+                "kms:UpdatePrimaryRegion"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "Allow use of the key",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::203890576771:role/IAMRole-EC2-bapbat-DEV",
+                    "arn:aws:iam::938772071201:role/IAMRole-EC2RLY",
+                    "arn:aws:iam::965076974932:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_kif_PowerUser_a888ca22011b9cde",
+                    "arn:aws:iam::965076974932:role/IAMRole-TrasferFamily-kif-DEV",
+                    "arn:aws:iam::965076974932:role/service-role/IAMRole-MWAA-kif-DEV"
+                ]
+            },
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "Allow attachment of persistent resources",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::938772071201:role/IAMRole-EC2RLY",
+                    "arn:aws:iam::965076974932:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_kif_PowerUser_a888ca22011b9cde",
+                    "arn:aws:iam::965076974932:role/IAMRole-TrasferFamily-kif-DEV",
+                    "arn:aws:iam::965076974932:role/service-role/IAMRole-MWAA-kif-DEV"
+                ]
+            },
+            "Action": [
+                "kms:CreateGrant",
+                "kms:ListGrants",
+                "kms:RevokeGrant"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "kms:GrantIsForAWSResource": "true"
+                }
+            }
+        },
+        {
+            "Sid": "Allow attachment of persistent resources",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::965076974932:role/trocco-role-dev",
+                    "arn:aws:iam::203890576771:role/IAMRole-EC2-bapbat-DEV"
+                ]
+            },
+            "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "Allow attachment of persistent resources",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "events.amazonaws.com"
+            },
+            "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

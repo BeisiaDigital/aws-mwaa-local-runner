@@ -1,0 +1,53 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowSSLRequestsOnly",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::be-s3-kif-receive-dev",
+                "arn:aws:s3:::be-s3-kif-receive-dev/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        },
+        {
+            "Sid": "SoE account permissions",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::203890576771:role/IAMRole-EC2-bapbat-DEV"
+            },
+            "Action": [
+                "s3:GetBucketLocation",
+                "s3:PutObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::be-s3-kif-receive-dev",
+                "arn:aws:s3:::be-s3-kif-receive-dev/*"
+            ]
+        },
+        {
+            "Sid": "RelayShipV2",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::938772071201:role/IAMRole-EC2RLY"
+            },
+            "Action": [
+                "s3:List*",
+                "s3:PutObject",
+                "s3:DeleteObject*",
+                "s3:GetObject*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::be-s3-kif-receive-dev",
+                "arn:aws:s3:::be-s3-kif-receive-dev/*"
+            ]
+        }
+    ]
+}
