@@ -65,15 +65,30 @@ services:
   awscli:
     container_name: "awscli"
     image: mesosphere/aws-cli
-    environment:
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - AWS_DEFAULT_REGION=ap-northeast-1
-      - AWS_ENDPOINT_URL=http://localstack:4566
     entrypoint: /bin/sh -c
     volumes:
       - "${PWD}/conf/:/root/conf/"
       - "${PWD}/docker/script/:/root/script/"
+      - "${PWD}/docker/config/.aws/:/root/.aws/"
     command: /root/script/create-kif-infra.sh
     depends_on:
       - localstack
+  
+  terraform:
+    container_name: "terraform"
+    image: hashicorp/terraform:1.6.6
+    volumes:
+      - "${PWD}/terraform/:/terraform/"
+      - "${PWD}/docker/config/.aws/:/root/.aws/"
+    working_dir: "/terraform"
+    entrypoint: /bin/sh -c
+    command: |
+      "
+      terraform init -backend-config envs/local.tfbackend -reconfigure
+      terraform apply -var-file envs/localstack.tfvars --auto-approve
+      "
+    depends_on:
+      awscli:
+        condition: service_completed_successfully
+
+    

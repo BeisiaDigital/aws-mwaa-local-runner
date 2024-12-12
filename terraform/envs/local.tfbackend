@@ -4,7 +4,7 @@ region  = "ap-northeast-1"
 key     = "kif/terraform.tfstate"
 encrypt = true
 endpoints = {
-    s3 = "http://localhost:4566"
-    sts = "http://localhost:4566"
+    s3 = "http://localstack:4566"
+    sts = "http://localstack:4566"
 }
 force_path_style = true
