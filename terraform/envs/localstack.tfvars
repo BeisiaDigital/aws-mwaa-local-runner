@@ -197,12 +197,11 @@ log = {
 
 pd_endpoint = ""
 
-# v3構築時に必要な設定。v3開発一時停止なので一時的にコメントアウト
-# v3 = {
-#   services = [
-#     "sinops"
-#   ]
-# }
+v3 = {
+  services = [
+    "sinops"
+  ]
+}
 # vpc endpoint source ips
 vpce_source_ips = {
   eob      = []
