@@ -1,0 +1,8 @@
+myhostname = mail.example.com
+mydomain = example.com
+mydestination = localhost, $myhostname, $mydomain
+mynetworks = 127.0.0.0/8, 172.18.0.0/16, 192.168.0.0/16
+inet_interfaces = all
+home_mailbox = Maildir/
+smtpd_relay_restrictions = reject_unauth_destination
+maillog_file = /dev/stdout

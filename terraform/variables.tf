@@ -76,7 +76,7 @@ variable "log" {}
 variable "pd_endpoint" {}
 
 # # v3
-# variable "v3" {}
+variable "v3" {}
 
 # vpc_endpoint
 variable "vpce_source_ips" {} # 許可するホストのIPアドレスを指定
