@@ -25,6 +25,8 @@ services:
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_DEFAULT_REGION=ap-northeast-1
       - AWS_ENDPOINT_URL=http://localstack:4566
+      - AIRFLOW__SMTP__SMTP_HOST=mail
+      - AIRFLOW__SMTP__SMTP_STARTTLS=False
     logging:
       options:
         max-size: 10m
@@ -91,4 +93,18 @@ services:
       awscli:
         condition: service_completed_successfully
 
-    
+  mail:
+    container_name: "mail"
+    image: alpine
+    entrypoint: /bin/sh -c
+    ports:
+      - "127.0.0.1:8025:25"
+    volumes:
+      - "${PWD}/docker/config/main.cf:/etc/postfix/main.cf"
+    command: |
+      "
+      apk update && apk upgrade
+      apk add postfix
+      cd /etc/postfix && postmap aliases
+      postfix start-fg
+      "
